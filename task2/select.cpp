@@ -1,4 +1,4 @@
-#include <iostream>A
+#include <iostream>
 #include <math.h>
 #include <sdsl/bit_vectors.hpp>
 using namespace std;
@@ -7,13 +7,15 @@ struct rank_support
 {
   sdsl::bit_vector b, rs, rb;
   uint64_t n, k, rs_width, rb_width;
+  rank_support() {};
+  
   rank_support(sdsl::bit_vector *b)
   {
     this->b = *b;
     init();
   }
 
-  uint64_t operator () (uint64_t i)
+  uint64_t operator () (int i)
   {
     return rank1(i);
   }
@@ -94,6 +96,49 @@ struct rank_support
   }
 };
 
+struct select_support
+{
+  rank_support *r;
+  select_support(rank_support *r)
+  {
+    this->r = r;
+  }
+
+  uint64_t operator () (uint64_t i)
+  {
+    return select1(i);
+  }
+  
+  uint64_t select1(uint64_t i)
+  {
+    int left = 0, right = r->n;
+    while (left < right)
+      {
+	int mid = (left + right) / 2;
+	if (r->rank1(mid) < i)
+	  left = mid + 1;
+	else
+	  right = mid;
+      }
+    return left;
+  }
+
+  uint64_t overhead()
+  {
+    return r->overhead();
+  }
+
+  void save(string& fname)
+  {
+    r->save(fname);
+  }
+
+  void load(string& fname)
+  {
+    r->load(fname);
+  }
+};
+
 int main()
 {
   int N=100;
@@ -101,16 +146,18 @@ int main()
   for(int i=0;i<N;i++)
     b1[i] = rand()%2;
   rank_support r1(&b1);
+  select_support s1(&r1);
   string fname = "in.txt";
-  r1.save(fname);
+  s1.save(fname);
   sdsl::bit_vector b2 = sdsl::bit_vector(10,0);
   rank_support r2(&b2);
-  r2.load(fname);
-  cout<<r1.overhead()<<" "<<r2.overhead()<<endl;
+  select_support s2(&r2);
+  s2.load(fname);
+  cout<<s1.overhead()<<" "<<s2.overhead()<<endl;
   int sum=0;
+  cout<<b1<<endl;
   for(int i=0;i<N;i++){
     sum+=b1[i];
-    cout<<r2(i)<<" "<<sum<<" "<<r1(i)<<endl;
+    cout<<i<<" "<<s1(i)<<" "<<r1(s1(i))<<endl;
   }
-  cout<<r1.overhead()<<" "<<r2.overhead()<<endl;
 }
