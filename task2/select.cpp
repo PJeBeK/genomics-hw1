@@ -15,7 +15,7 @@ struct rank_support
     init();
   }
 
-  uint64_t operator () (int i)
+  uint64_t operator () (uint64_t i)
   {
     return rank1(i);
   }
@@ -30,6 +30,10 @@ struct rank_support
   void init()
   {
     compute_lengths();
+    uint64_t rs_len = rs_width * ceil(n / (k * k));
+    uint64_t rb_len = rb_width * ceil(n / k);
+    rs = sdsl::bit_vector(rs_len);
+    rb = sdsl::bit_vector(rb_len);
     for (int i = 0; i*k*k < n; i ++)
       {
 	write_on_rs(i, (i==0 ? 0 : read_from_rs(i - 1) + read_from_rb(i*k - 1) + count_ones_on_b(i*k*k - k, k)));
@@ -99,6 +103,8 @@ struct rank_support
 struct select_support
 {
   rank_support *r;
+  select_support() {};
+
   select_support(rank_support *r)
   {
     this->r = r;
