@@ -1,0 +1,20 @@
+Compilation command:
+	g++ -std=c++11 -I /usr/local/include -L /usr/local/lib select.cpp -lsdsl -ldivsufsort -ldivsufsort64
+Running command (this will generate necessary data for plotting):
+	./a.out
+
+Instruction for using the code:
+First, you should initiate bit_vector `b` of size `N` with this command:
+        sdsl::bit_vector b(N, 0);
+Then, you can create an instance of rank_support:
+        rank_support r(&b);
+And after that, you create an instance of select_support:
+        select_support s(&r);
+Now, you can call `s(i)` or `r.select1(i)` to get the first index with rank of i.
+Also, you can call `s.overhead()` to get the number of extra bits in our `select_support` structure.
+The `overhead()` function does not count the bit_vector `b`. It just calculate extra bits which are `rs` and `rb`.
+At the end, you can use `s.save(fname)` and `s.load(fname)` to save and load a `select_support` instance into `fname` file.
+
+Extra information about main():
+In the `main()` function, there is a commented section which is an example for using the `select_support` structure.
+After this part, you could see the code that generates data for plotting. I put its output into `data_for_plot` file.

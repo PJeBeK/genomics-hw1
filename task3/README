@@ -1,0 +1,16 @@
+Compilation command:
+	g++ -std=c++11 -I /usr/local/include -L /usr/local/lib sparse_array.cpp -lsdsl -ldivsufsort -ldivsufsort64
+Running command (this will generate necessary data for plotting):
+	./a.out
+
+Instruction for using the code:
+First, you should create an instance of `sparse_array` and initiate it with these commands:
+        sparse_array sa;
+	sa.create(N);
+Then you should appned your elements with this command:
+        sa.append(elem, i);
+This command will append element `elem` at positon `i`;
+Now, you can call `sa.get_at_rank(i, elem)` and `sa.get_at_index(i, elem)` to get element at rank i and element at index i if existed.
+
+Extra information about main():
+In the `main()` function, there is a commented section which is an example for using the `sparse_array` structure.

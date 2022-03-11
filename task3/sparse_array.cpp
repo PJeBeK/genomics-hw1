@@ -207,25 +207,26 @@ struct sparse_array
 
 int main()
 {
-  sparse_array sa;
-  sa.create(10);
-  sa.append("foo", 1);
-  sa.append("bar", 5);
-  sa.append("baz", 9);
-  string s1,s2,s3;
-  cout<<sa.get_at_rank(1, s1)<<" "<<sa.get_at_index(3, s2)<<" "<<sa.get_at_index(5, s3)<<endl;
-  cout<<s1<<endl<<s2<<endl<<s3<<endl;
-  string fname = "in.txt";
-  sa.save(fname);
-  sparse_array sa1;
-  sa1.load(fname);
-  cout<<sa1.size()<<" "<<sa1.num_elem()<<endl;
-  for(int i=0;i<=3;i++){
+  /*
+    sparse_array sa;
+    sa.create(10);
+    sa.append("foo", 1);
+    sa.append("bar", 5);
+    sa.append("baz", 9);
+    string s1,s2,s3;
+    cout<<sa.get_at_rank(1, s1)<<" "<<sa.get_at_index(3, s2)<<" "<<sa.get_at_index(5, s3)<<endl;
+    cout<<s1<<endl<<s2<<endl<<s3<<endl;
+    string fname = "in.txt";
+    sa.save(fname);
+    sa.load(fname);
+    cout<<sa.size()<<" "<<sa.num_elem()<<endl;
+    for(int i=0;i<=3;i++){
     string tmp;
-    cout<<"rank "<<i<<" "<<sa1.get_at_rank(i, tmp) <<" "<<tmp<<endl;
-  }
-  for(int i=0;i<=10;i++){
+    cout<<"rank "<<i<<" "<<sa.get_at_rank(i, tmp) <<" "<<tmp<<endl;
+    }
+    for(int i=0;i<=10;i++){
     string tmp;
-    cout<<"index "<<i<<" "<<sa1.num_elem_at(i)<<" "<<sa1.get_at_index(i, tmp) <<" "<<tmp<<endl;
-  }
+    cout<<"index "<<i<<" "<<sa.num_elem_at(i)<<" "<<sa.get_at_index(i, tmp) <<" "<<tmp<<endl;
+    }
+  */
 }

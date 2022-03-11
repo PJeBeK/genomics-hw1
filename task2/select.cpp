@@ -147,23 +147,45 @@ struct select_support
 
 int main()
 {
-  int N=100;
-  sdsl::bit_vector b1 = sdsl::bit_vector(N, 0);
-  for(int i=0;i<N;i++)
-    b1[i] = rand()%2;
-  rank_support r1(&b1);
-  select_support s1(&r1);
-  string fname = "in.txt";
-  s1.save(fname);
-  sdsl::bit_vector b2 = sdsl::bit_vector(10,0);
-  rank_support r2(&b2);
-  select_support s2(&r2);
-  s2.load(fname);
-  cout<<s1.overhead()<<" "<<s2.overhead()<<endl;
-  int sum=0;
-  cout<<b1<<endl;
-  for(int i=0;i<N;i++){
-    sum+=b1[i];
-    cout<<i<<" "<<s1(i)<<" "<<r1(s1(i))<<endl;
-  }
+  /*
+    int N=100;
+    sdsl::bit_vector b(N, 0);
+    for(int i=0;i<N;i++)
+    b[i] = rand()%2;
+    rank_support r(&b);
+    select_support s(&r);
+    string fname = "in.txt";
+    s.save(fname);
+    s.load(fname);
+    cout<<s.overhead()<<" "<<s.overhead()<<endl;
+    int sum=0;
+    for(int i=0;i<N;i++){
+    sum+=b[i];
+    cout<<i<<" "<<s(i)<<" "<<r(s(i))<<endl;
+    }
+  */
+  const int n = 6;
+  int N[] = {0, 10000, 100000, 1000000, 10000000, 100000000};
+  int overhead[6];
+  cout<<"CONSUMED TIME\nFormat: size_of_bit_vector number_of_select_query consumed_time"<<endl;
+  for(int i=1;i<n;i++)
+    {
+      sdsl::bit_vector b(N[i], 0);
+      for(int j=0;j<N[i];j++)
+        b[i] = rand()%2;
+      rank_support r(&b);
+      select_support s(&r);
+
+      const clock_t start_time = clock();
+      for(int j=1;j<n;j++)
+        {
+          for(int k=N[j-1]; k<N[j]; k++)
+            s(rand()%(N[i]/2));
+          cout<<N[i]<<" "<<N[j]<<" "<<float(clock() - start_time) / CLOCKS_PER_SEC<<endl;
+        }
+      overhead[i] = s.overhead();
+    }
+  cout<<"\nOVERHEAD\nFormat: size_of_bit_vector overload"<<endl;
+  for(int i=1;i<n;i++)
+    cout<<N[i]<<" "<<overhead[i]<<endl;
 }
